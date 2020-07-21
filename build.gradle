@@ -1,38 +1,43 @@
-plugins {
-	id 'org.springframework.boot' version '2.4.0-SNAPSHOT'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
+buildscript {
+   ext {
+      springBootVersion = '1.5.9.RELEASE'
+   }
+   repositories {
+      mavenCentral()
+   }
+   dependencies {
+      classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+   }
 }
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
+group = 'com.rajesh.mdc'
+sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
-	maven { url 'https://repo.spring.io/snapshot' }
+   mavenCentral()
 }
-
+ext {
+   springCloudVersion = 'Edgware.RELEASE'
+}
 dependencies {
-	
-	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.springframework.boot:spring-boot-starter-actuator")
+   	compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+   	compile('org.springframework.boot:spring-boot-starter-web')
+   	compile("org.springframework.boot:spring-boot-starter-actuator")
 	compile("org.springframework.boot:spring-boot-starter-logging")
     compile("org.springframework.boot:spring-boot-starter-aop")
-	compileOnly("org.projectlombok:lombok")
-	annotationProcessor("org.projectlombok:lombok")
+	compileOnly 'org.projectlombok:lombok:1.18.8'
+	annotationProcessor 'org.projectlombok:lombok:1.18.8'
 	compile("io.springfox:springfox-swagger2:2.4.0")
     compile("io.springfox:springfox-swagger-ui:2.4.0")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+   	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-test {
-	useJUnitPlatform()
+dependencyManagement {
+   imports {
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+   }
 }
